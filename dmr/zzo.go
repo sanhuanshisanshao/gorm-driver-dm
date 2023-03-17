@@ -7,7 +7,7 @@ package dmr
 import (
 	"strconv"
 
-	"github.com/nfjBill/gorm-driver-dm/dmr/util"
+	"github.com/sanhuanshisanshao/gorm-driver-dm/dmr/util"
 )
 
 const (
