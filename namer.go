@@ -1,8 +1,9 @@
 package dm
 
 import (
-	"gorm.io/gorm/schema"
 	"strings"
+
+	"gorm.io/gorm/schema"
 )
 
 type Namer struct {

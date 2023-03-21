@@ -3,11 +3,12 @@ package dm
 import (
 	"database/sql"
 	"fmt"
-	"github.com/sanhuanshisanshao/gorm-driver-dm/clauses"
-	"gorm.io/gorm/utils"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/sanhuanshisanshao/gorm-driver-dm/clauses"
+	"gorm.io/gorm/utils"
 
 	_ "github.com/sanhuanshisanshao/gorm-driver-dm/dmr"
 	"github.com/thoas/go-funk"
@@ -22,6 +23,7 @@ import (
 type Config struct {
 	DriverName        string
 	DSN               string
+	TableSpaceName    string
 	Conn              *sql.DB
 	DefaultStringSize uint
 }
@@ -30,8 +32,11 @@ type Dialector struct {
 	*Config
 }
 
-func Open(dsn string) gorm.Dialector {
-	return &Dialector{Config: &Config{DSN: dsn}}
+func Open(dsn, spaceName string) gorm.Dialector {
+	return &Dialector{Config: &Config{
+		DSN:            dsn,
+		TableSpaceName: spaceName,
+	}}
 }
 
 func New(config Config) gorm.Dialector {
@@ -188,6 +193,7 @@ func (d Dialector) Migrator(db *gorm.DB) gorm.Migrator {
 		Migrator: migrator.Migrator{
 			Config: migrator.Config{
 				DB:                          db,
+				TableSpaceName:              d.TableSpaceName, // 只有在生成代码的时候会使用
 				Dialector:                   d,
 				CreateIndexAfterCreateTable: true,
 			},

@@ -2,9 +2,10 @@ package dm
 
 import (
 	"fmt"
-	"gorm.io/gorm/schema"
 	"strconv"
 	"strings"
+
+	"gorm.io/gorm/schema"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -75,6 +76,12 @@ func (m Migrator) CreateIndex(value interface{}, name string) error {
 
 		return fmt.Errorf("failed to create index with name %s", name)
 	})
+}
+
+func (m Migrator) GetTables() (tableList []string, err error) {
+	err = m.DB.Raw(fmt.Sprintf("select concat(concat(TABLESPACE_NAME,'.'),TABLE_NAME) from all_tables where TABLESPACE_NAME='%s';", m.Migrator.Config.TableSpaceName)).
+		Scan(&tableList).Error
+	return
 }
 
 func (m Migrator) CreateTable(values ...interface{}) error {
