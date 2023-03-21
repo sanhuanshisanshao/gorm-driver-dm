@@ -79,7 +79,7 @@ func (m Migrator) CreateIndex(value interface{}, name string) error {
 }
 
 func (m Migrator) GetTables() (tableList []string, err error) {
-	err = m.DB.Raw(fmt.Sprintf("select concat(concat(TABLESPACE_NAME,'.'),TABLE_NAME) from all_tables where TABLESPACE_NAME='%s';", m.Migrator.Config.TableSpaceName)).
+	err = m.DB.Raw(fmt.Sprintf("select concat(concat(OWNER,'.'),TABLE_NAME) from all_tables where TABLESPACE_NAME='%s';", m.Migrator.Config.TableSpaceName)).
 		Scan(&tableList).Error
 	return
 }
